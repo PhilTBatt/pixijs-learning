@@ -15,6 +15,20 @@ import { Application, Graphics } from "pixi.js";
   gameboard.x = app.screen.width / 2
   gameboard.y = app.screen.height / 2
   gameboard.fill({ color: 0x964B00 })
-
   app.stage.addChild(gameboard)
+
+  const tileHeight = app.screen.height / 6.5
+  const tileWidth = app.screen.width / 10
+  const tileSpacing = app.screen.width / 50
+
+  for (let i = -1; i < 2; i++) {
+    for (let j = -1; j < 2; j++) {
+      const tile = new Graphics()
+      tile.rect(-tileWidth/2, -tileHeight/2, tileWidth, tileHeight)
+      tile.x = gameboard.x + j * tileWidth  + tileSpacing * j
+      tile.y = gameboard.y + i * tileHeight  + tileSpacing * i
+      tile.fill({ color: 0xFFFFFF })
+      app.stage.addChild(tile)
+    }
+  }
 })()
