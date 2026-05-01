@@ -23,7 +23,7 @@ import { Application, Graphics } from "pixi.js";
 
   const symbols = [
     { name: 'star', draw: (g: Graphics) => g.star(0, 0, 5, 30, 12).fill({ color: 0xFFD700 }) },
-    { name: 'circle', draw: (g: Graphics) => g.circle(0, 0, 30).fill({ color: 0xFF4444 }) },
+    { name: 'circle', draw: (g: Graphics) => g.circle(0, 0, 30).fill({ color: 0xd1001f }) },
     { name: 'diamond', draw: (g: Graphics) => g.rect(-20, -20, 40, 40).fill({ color: 0x44AAFF }) },
   ]
 
@@ -33,12 +33,14 @@ import { Application, Graphics } from "pixi.js";
       tile.rect(-tileWidth/2, -tileHeight/2, tileWidth, tileHeight)
       tile.x = gameboard.x + j * tileWidth  + tileSpacing * j
       tile.y = gameboard.y + i * tileHeight  + tileSpacing * i
-      tile.fill({ color: 0xFFFFFF })
+      tile.fill({ color: 0xFFA500 })
       app.stage.addChild(tile)
 
       tile.eventMode = "static"
+      tile.cursor = 'pointer'
       tile.on('pointerdown', () => {
-        tile.tint = 0xff0000
+        tile.eventMode = 'none'
+        tile.tint = 0xff9999
         const symbol = symbols[Math.floor(Math.random() * symbols.length)]
         const symbolGraphic = new Graphics()
         symbol.draw(symbolGraphic)
