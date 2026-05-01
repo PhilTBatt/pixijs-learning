@@ -21,6 +21,12 @@ import { Application, Graphics } from "pixi.js";
   const tileWidth = app.screen.width / 10
   const tileSpacing = app.screen.width / 50
 
+  const symbols = [
+    { name: 'star', draw: (g: Graphics) => g.star(0, 0, 5, 30, 12).fill({ color: 0xFFD700 }) },
+    { name: 'circle', draw: (g: Graphics) => g.circle(0, 0, 30).fill({ color: 0xFF4444 }) },
+    { name: 'diamond', draw: (g: Graphics) => g.rect(-20, -20, 40, 40).fill({ color: 0x44AAFF }) },
+  ]
+
   for (let i = -1; i < 2; i++) {
     for (let j = -1; j < 2; j++) {
       const tile = new Graphics()
@@ -29,6 +35,17 @@ import { Application, Graphics } from "pixi.js";
       tile.y = gameboard.y + i * tileHeight  + tileSpacing * i
       tile.fill({ color: 0xFFFFFF })
       app.stage.addChild(tile)
+
+      tile.eventMode = "static"
+      tile.on('pointerdown', () => {
+        tile.tint = 0xff0000
+        const symbol = symbols[Math.floor(Math.random() * symbols.length)]
+        const symbolGraphic = new Graphics()
+        symbol.draw(symbolGraphic)
+        app.stage.addChild(symbolGraphic)
+        symbolGraphic.x = tile.x
+        symbolGraphic.y = tile.y
+      })
     }
   }
 })()
