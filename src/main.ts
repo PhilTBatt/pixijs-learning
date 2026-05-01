@@ -39,6 +39,22 @@ import { Application, Container, Graphics, Text } from "pixi.js";
 	winText.anchor.set(0.5)
 	winScreen.addChild(winText)
 
+	const resetButtonWidth = app.screen.width / 10
+	const resetButtonHeight = app.screen.height / 12
+	const resetButtonOffsetY = app.screen.height / 6
+	const resetButton = new Container()
+	resetButton.y = resetButtonOffsetY
+	resetButton.eventMode = "static"
+	resetButton.cursor = 'pointer'
+	const resetBackground = new Graphics()
+	resetBackground.rect(-resetButtonWidth/2, -resetButtonHeight/2, resetButtonWidth, resetButtonHeight)
+	resetBackground.fill({ color: 0x00bfbf })
+	resetButton.addChild(resetBackground)
+	const resetText = new Text({text: 'Reset', style: {fontSize: 32, fill: 0xffffff}})
+	resetText.anchor.set(0.5)
+	resetButton.addChild(resetText)
+	winScreen.addChild(resetButton)
+
 	const tileContainer = new Container()
 	app.stage.addChild(tileContainer)
 
