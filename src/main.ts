@@ -1,4 +1,4 @@
-import { Application } from "pixi.js";
+import { Application, Graphics } from "pixi.js";
 
 (async () => {
   const app = new Application()
@@ -7,4 +7,14 @@ import { Application } from "pixi.js";
 
   document.getElementById("pixi-container")!.appendChild(app.canvas)
 
+  const gameboardHeight = app.screen.height / 1.5
+  const gameboardWidth = app.screen.width / 2.5
+
+  const gameboard = new Graphics()
+  gameboard.rect(-gameboardWidth/2, -gameboardHeight/2, gameboardWidth, gameboardHeight)
+  gameboard.x = app.screen.width / 2
+  gameboard.y = app.screen.height / 2
+  gameboard.fill({ color: 0x964B00 })
+
+  app.stage.addChild(gameboard)
 })()
