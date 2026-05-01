@@ -27,6 +27,8 @@ import { Application, Graphics } from "pixi.js";
     { name: 'diamond', draw: (g: Graphics) => g.rect(-20, -20, 40, 40).fill({ color: 0x44AAFF }) },
   ]
 
+  const revealedSymbols: string[] = []
+
   for (let i = -1; i < 2; i++) {
     for (let j = -1; j < 2; j++) {
       const tile = new Graphics()
@@ -47,6 +49,17 @@ import { Application, Graphics } from "pixi.js";
         app.stage.addChild(symbolGraphic)
         symbolGraphic.x = tile.x
         symbolGraphic.y = tile.y
+
+        revealedSymbols.push(symbol.name)
+
+        if (revealedSymbols.length === 9) {
+          const counts = revealedSymbols.reduce((acc: Record<string, number>, symbol) => {
+            acc[symbol] = (acc[symbol] || 0) + 1
+            return acc
+          }, {})
+          
+          for (const count in counts) if (counts[count] >= 3) console.log(`You win!`)
+        }
       })
     }
   }
