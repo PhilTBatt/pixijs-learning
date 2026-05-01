@@ -26,6 +26,8 @@ import { Application, Container, Graphics, Text } from "pixi.js";
 		{ name: 'circle', draw: (g: Graphics) => g.circle(0, 0, 30).fill({ color: 0xd1001f }) },
 		{ name: 'diamond', draw: (g: Graphics) => g.rect(-20, -20, 40, 40).fill({ color: 0x44AAFF }) },
 	]
+	const tiles: Graphics[] = []
+	const revealedSymbols: string[] = []
 
 	const winScreen = new Container()
 	winScreen.visible = false
@@ -55,13 +57,22 @@ import { Application, Container, Graphics, Text } from "pixi.js";
 	resetButton.addChild(resetText)
 	winScreen.addChild(resetButton)
 
+	resetButton.on('pointerdown', () => {
+		winScreen.visible = false
+		tiles.forEach(tile => {
+			tile.tint = 0xffffff
+			tile.eventMode = 'static'
+			tile.cursor = 'pointer'
+		})
+		symbolContainer.removeChildren()
+		revealedSymbols.length = 0
+	})
+
 	const tileContainer = new Container()
 	app.stage.addChild(tileContainer)
 
 	const symbolContainer = new Container()
 	app.stage.addChild(symbolContainer)
-
-	const revealedSymbols: string[] = []
 
 	for (let i = -1; i < 2; i++) {
 		for (let j = -1; j < 2; j++) {
@@ -71,6 +82,7 @@ import { Application, Container, Graphics, Text } from "pixi.js";
 		tile.y = gameboard.y + i * tileHeight  + tileSpacing * i
 		tile.fill({ color: 0xFFA500 })
 		tileContainer.addChild(tile)
+		tiles.push(tile)
 
 		tile.eventMode = "static"
 		tile.cursor = 'pointer'
