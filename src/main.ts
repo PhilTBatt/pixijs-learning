@@ -112,7 +112,10 @@ import { Application, Container, Graphics, Text } from "pixi.js";
 
 				winScreen.alpha = 0
 				winScreen.visible = true
-				gsap.to(winScreen, {alpha: 1, duration: 2})
+				gsap.to(winScreen, {alpha: 1, duration: 2, onComplete: () => {
+					gsap.to(winText.scale, { x: 1.2, y: 1.2, duration: 0.5, yoyo: true, repeat: -1})
+					gsap.to(winText, { y: -30, duration: 0.5, ease: "power2.out", yoyo: true, repeat: -1 })
+				}})
 			
 				for (const count in counts) if (counts[count] >= 3) {
 					winText.text = 'You Win!'
