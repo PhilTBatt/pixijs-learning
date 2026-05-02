@@ -29,7 +29,7 @@ import { Application, Container, Graphics, Text } from "pixi.js";
 		{ name: 'diamond', draw: (g: Graphics) => g.rect(-20, -20, 40, 40).fill({ color: 0x00bfbf }).angle = 45 }
 	]
 	const tiles: Graphics[] = []
-	const revealedSymbols: string[] = []
+	const revealedSymbols: { name: string, graphic: Graphics }[] = []
 
 	const winScreen = new Container()
 	winScreen.visible = false
@@ -97,7 +97,7 @@ import { Application, Container, Graphics, Text } from "pixi.js";
 			symbolGraphic.x = tile.x
 			symbolGraphic.y = tile.y
 
-			revealedSymbols.push(symbol.name)
+			revealedSymbols.push({ name: symbol.name, graphic: symbolGraphic })
 
 			gsap.to(tile.scale, {x:0, duration: 0.15, onComplete: () => {
 				gsap.to(tile.scale, {x:1, duration: 0.15, onComplete: () => symbolContainer.addChild(symbolGraphic)})
@@ -106,7 +106,7 @@ import { Application, Container, Graphics, Text } from "pixi.js";
 
 			if (revealedSymbols.length === 9) {
 				const counts = revealedSymbols.reduce((acc: Record<string, number>, symbol) => {
-					acc[symbol] = (acc[symbol] || 0) + 1
+					acc[symbol.name] = (acc[symbol.name] || 0) + 1
 					return acc
 				}, {})
 
@@ -115,6 +115,10 @@ import { Application, Container, Graphics, Text } from "pixi.js";
 				gsap.to(winScreen, {alpha: 1, duration: 2, onComplete: () => {
 					gsap.to(winText.scale, { x: 1.2, y: 1.2, duration: 0.5, yoyo: true, repeat: -1})
 					gsap.to(winText, { y: -30, duration: 0.5, ease: "power2.out", yoyo: true, repeat: -1 })
+					for (const symbol of revealedSymbols) if (counts[symbol.name] >= 3) {
+						gsap.to(symbol.graphic.scale, { x: 1.3, y: 1.3, duration: 0.5, yoyo: true, repeat: -1})
+						gsap.to(symbol.graphic, { y: symbol.graphic.y -5, duration: 0.5, ease: "power2.out", yoyo: true, repeat: -1 })
+					}
 				}})
 			
 				for (const count in counts) if (counts[count] >= 3) {
