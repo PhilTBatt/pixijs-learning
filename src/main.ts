@@ -1,3 +1,4 @@
+import gsap from "gsap";
 import { Application, Container, Graphics, Text } from "pixi.js";
 
 (async () => {
@@ -93,11 +94,15 @@ import { Application, Container, Graphics, Text } from "pixi.js";
 			const symbol = symbols[Math.floor(Math.random() * symbols.length)]
 			const symbolGraphic = new Graphics()
 			symbol.draw(symbolGraphic)
-			symbolContainer.addChild(symbolGraphic)
 			symbolGraphic.x = tile.x
 			symbolGraphic.y = tile.y
 
 			revealedSymbols.push(symbol.name)
+
+			gsap.to(tile.scale, {x:0, duration: 0.15, onComplete: () => {
+				gsap.to(tile.scale, {x:1, duration: 0.15, onComplete: () => symbolContainer.addChild(symbolGraphic)})
+				}
+			})
 
 			if (revealedSymbols.length === 9) {
 				const counts = revealedSymbols.reduce((acc: Record<string, number>, symbol) => {
