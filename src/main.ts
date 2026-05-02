@@ -26,7 +26,8 @@ import { Application, Container, Graphics, Text } from "pixi.js";
 		{ name: 'star', draw: (g: Graphics) => g.star(0, 0, 5, 30, 12).fill({ color: 0xFFD700 }) },
 		{ name: 'circle', draw: (g: Graphics) => g.circle(0, 0, 30).fill({ color: 0xd1001f }) },
 		{ name: 'square', draw: (g: Graphics) => g.rect(-20, -20, 40, 40).fill({ color: 0x2266FF }) },
-		{ name: 'diamond', draw: (g: Graphics) => g.rect(-20, -20, 40, 40).fill({ color: 0x00bfbf }).angle = 45 }
+		{ name: 'diamond', draw: (g: Graphics) => g.rect(-20, -20, 40, 40).fill({ color: 0x00bfbf }).angle = 45 },
+		{ name: 'triangle', draw: (g: Graphics) => g.poly([0, -30, 30, 30, -30, 30]).fill({ color: 0x22cc44 }) }
 	]
 	const tiles: Graphics[] = []
 	const revealedSymbols: { name: string, graphic: Graphics }[] = []
@@ -68,6 +69,11 @@ import { Application, Container, Graphics, Text } from "pixi.js";
 		})
 		symbolContainer.removeChildren()
 		revealedSymbols.length = 0
+		gsap.killTweensOf(winText.scale)
+		gsap.killTweensOf(winText)
+		winText.scale.set(1)
+		winText.y = 0
+		winText.text = 'You Lose!'
 	})
 
 	const tileContainer = new Container()
