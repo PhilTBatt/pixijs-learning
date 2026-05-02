@@ -24,7 +24,8 @@ import { Application, Container, Graphics, Text } from "pixi.js";
 	const symbols = [
 		{ name: 'star', draw: (g: Graphics) => g.star(0, 0, 5, 30, 12).fill({ color: 0xFFD700 }) },
 		{ name: 'circle', draw: (g: Graphics) => g.circle(0, 0, 30).fill({ color: 0xd1001f }) },
-		{ name: 'diamond', draw: (g: Graphics) => g.rect(-20, -20, 40, 40).fill({ color: 0x44AAFF }) },
+		{ name: 'square', draw: (g: Graphics) => g.rect(-20, -20, 40, 40).fill({ color: 0x2266FF }) },
+		{ name: 'diamond', draw: (g: Graphics) => g.rect(-20, -20, 40, 40).fill({ color: 0x00bfbf }).angle = 45 }
 	]
 	const tiles: Graphics[] = []
 	const revealedSymbols: string[] = []
@@ -37,7 +38,7 @@ import { Application, Container, Graphics, Text } from "pixi.js";
 	winBackground.rect(-gameboardWidth/2, -gameboardHeight/2, gameboardWidth, gameboardHeight)
 	winBackground.fill({ color: 0x000000, alpha: 0.6 })
 	winScreen.addChild(winBackground)
-	const winText = new Text({text: 'You Win!', style: {fontSize: 64, fill: 0xffffff, fontWeight: 'bold'}})
+	const winText = new Text({text: 'You Lose!', style: {fontSize: 64, fill: 0xffffff, fontWeight: 'bold'}})
 	winText.anchor.set(0.5)
 	winScreen.addChild(winText)
 
@@ -50,7 +51,7 @@ import { Application, Container, Graphics, Text } from "pixi.js";
 	resetButton.cursor = 'pointer'
 	const resetBackground = new Graphics()
 	resetBackground.rect(-resetButtonWidth/2, -resetButtonHeight/2, resetButtonWidth, resetButtonHeight)
-	resetBackground.fill({ color: 0x00bfbf })
+	resetBackground.fill({ color: 0x909090 })
 	resetButton.addChild(resetBackground)
 	const resetText = new Text({text: 'Reset', style: {fontSize: 32, fill: 0xffffff}})
 	resetText.anchor.set(0.5)
@@ -99,15 +100,17 @@ import { Application, Container, Graphics, Text } from "pixi.js";
 			revealedSymbols.push(symbol.name)
 
 			if (revealedSymbols.length === 9) {
-			const counts = revealedSymbols.reduce((acc: Record<string, number>, symbol) => {
-				acc[symbol] = (acc[symbol] || 0) + 1
-				return acc
-			}, {})
-			
-			for (const count in counts) if (counts[count] >= 3) {
+				const counts = revealedSymbols.reduce((acc: Record<string, number>, symbol) => {
+					acc[symbol] = (acc[symbol] || 0) + 1
+					return acc
+				}, {})
+
 				winScreen.visible = true
-				break
-			}
+			
+				for (const count in counts) if (counts[count] >= 3) {
+					winText.text = 'You Lose!'
+					break
+				}
 			}
 		})
 		}
