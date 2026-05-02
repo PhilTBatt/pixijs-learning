@@ -108,7 +108,7 @@ import { Application, Container, Graphics, Text } from "pixi.js";
 				winScreen.visible = true
 			
 				for (const count in counts) if (counts[count] >= 3) {
-					winText.text = 'You Lose!'
+					winText.text = 'You Win!'
 					break
 				}
 			}
