@@ -1,8 +1,9 @@
 import { Application, Container, Graphics, Text } from "pixi.js";
 import gsap from "gsap";
+import { Gameboard } from "./Gameboard";
 
 export class Game {
-    app: Application;
+    app: Application
 
     constructor(app: Application) {
         this.app = app
@@ -16,12 +17,8 @@ export class Game {
         const gameboardHeight = this.app.screen.height / 1.5
         const gameboardWidth = this.app.screen.width / 2.5
 
-        const gameboard = new Graphics()
-        gameboard.rect(-gameboardWidth/2, -gameboardHeight/2, gameboardWidth, gameboardHeight)
-        gameboard.x = this.app.screen.width / 2
-        gameboard.y = this.app.screen.height / 2
-        gameboard.fill({ color: 0x964B00 })
-        this.app.stage.addChild(gameboard)
+        const gameboard = new Gameboard(this.app, gameboardWidth, gameboardHeight)
+        gameboard.initialiseGameBoard()
 
         const tileHeight = this.app.screen.height / 6.5
         const tileWidth = this.app.screen.width / 10
@@ -39,8 +36,8 @@ export class Game {
 
         const winScreen = new Container()
         winScreen.visible = false
-        winScreen.x = gameboard.x
-        winScreen.y = gameboard.y
+        winScreen.x = gameboard.gameboard.x
+        winScreen.y = gameboard.gameboard.y
         const winBackground = new Graphics()
         winBackground.rect(-gameboardWidth/2, -gameboardHeight/2, gameboardWidth, gameboardHeight)
         winBackground.fill({ color: 0x000000, alpha: 0.6 })
@@ -74,6 +71,7 @@ export class Game {
             })
             symbolContainer.removeChildren()
             revealedSymbols.length = 0
+            gsap.killTweensOf(winScreen)
             gsap.killTweensOf(winText.scale)
             gsap.killTweensOf(winText)
             winText.scale.set(1)
@@ -91,8 +89,8 @@ export class Game {
             for (let j = -1; j < 2; j++) {
             const tile = new Graphics()
             tile.rect(-tileWidth/2, -tileHeight/2, tileWidth, tileHeight)
-            tile.x = gameboard.x + j * tileWidth  + tileSpacing * j
-            tile.y = gameboard.y + i * tileHeight  + tileSpacing * i
+            tile.x = gameboard.gameboard.x + j * tileWidth  + tileSpacing * j
+            tile.y = gameboard.gameboard.y + i * tileHeight  + tileSpacing * i
             tile.fill({ color: 0xFFA500 })
             tileContainer.addChild(tile)
             tiles.push(tile)
