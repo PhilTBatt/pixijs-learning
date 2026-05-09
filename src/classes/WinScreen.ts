@@ -2,6 +2,7 @@ import { Container, Graphics, Text } from "pixi.js";
 import { Gameboard } from "./Gameboard";
 import { Game } from "./Game";
 import gsap from "gsap";
+import { Button } from "./Button";
 
 export class WinScreen {
     game: Game
@@ -9,7 +10,7 @@ export class WinScreen {
     winScreen: Container
     winBackground: Graphics
     winText: Text
-    resetButton: Container
+    resetButton: Button
 
     constructor(game: Game) {
         this.game = game
@@ -21,17 +22,7 @@ export class WinScreen {
         const resetButtonWidth = this.game.app.screen.width / 10
         const resetButtonHeight = this.game.app.screen.height / 12
         const resetButtonOffsetY = this.game.app.screen.height / 6
-        this.resetButton = new Container()
-        this.resetButton.y = resetButtonOffsetY
-        this.resetButton.eventMode = "static"
-        this.resetButton.cursor = 'pointer'
-        const resetBackground = new Graphics()
-        resetBackground.rect(-resetButtonWidth/2, -resetButtonHeight/2, resetButtonWidth, resetButtonHeight)
-        resetBackground.fill({ color: 0x909090 })
-        this.resetButton.addChild(resetBackground)
-        const resetText = new Text({text: 'Reset', style: {fontSize: 32, fill: 0xffffff}})
-        resetText.anchor.set(0.5)
-        this.resetButton.addChild(resetText)
+        this.resetButton = new Button(this.game, resetButtonWidth, resetButtonHeight, resetButtonOffsetY, 'Reset', 0x909090, () => this.gameboard.resetGameBoard())
     }
 
     initialiseWinScreen(gameboard: Gameboard) {
@@ -46,7 +37,7 @@ export class WinScreen {
         
         this.winScreen.addChild(this.winBackground)
         this.winScreen.addChild(this.winText)
-        this.winScreen.addChild(this.resetButton)
+        this.winScreen.addChild(this.resetButton.buttonContainer)
         this.game.app.stage.addChild(this.winScreen)
     }
 

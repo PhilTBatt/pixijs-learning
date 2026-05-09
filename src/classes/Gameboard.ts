@@ -34,8 +34,6 @@ export class Gameboard {
         this.gameboard.fill({ color: 0x964B00 })
         this.game.app.stage.addChild(this.gameboard)
 
-        this.game.winScreen.resetButton.on('pointerdown', () => { this.resetGameBoard() })
-
         const tileHeight = this.game.app.screen.height / 6.5
         const tileWidth = this.game.app.screen.width / 10
         const tileSpacing = this.game.app.screen.width / 50
