@@ -1,6 +1,6 @@
 import { Graphics } from "pixi.js";
 import { Game } from "./Game";
-import { Symbol } from "../types/Symbol";
+import { Symbol, symbols } from "../types/Symbol";
 import { Tile } from "./Tile";
 import gsap from "gsap";
 
@@ -18,13 +18,7 @@ export class Gameboard {
         this.gameboardWidth = gameboardWidth
         this.gameboardHeight = gameboardHeight
         this.tiles = []
-        this.symbols = [
-            { name: 'star', draw: () => new Graphics().star(0, 0, 5, 30, 12).fill({ color: 0xFFD700 }) },
-            { name: 'circle', draw: () => new Graphics().circle(0, 0, 30).fill({ color: 0xd1001f }) },
-            { name: 'square', draw: () => new Graphics().rect(-20, -20, 40, 40).fill({ color: 0x2266FF }) },
-            { name: 'triangle', draw: () => new Graphics().poly([0, -30, 30, 30, -30, 30]).fill({ color: 0x22cc44 }) },
-            { name: 'diamond', draw: () => {const graphic = new Graphics().rect(-20, -20, 40, 40).fill({ color: 0x00bfbf }); graphic.angle = 45; return graphic} }
-        ]
+        this.symbols = symbols
     }
 
     initialiseGameBoard() {
