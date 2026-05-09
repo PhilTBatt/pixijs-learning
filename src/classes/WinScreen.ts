@@ -1,10 +1,11 @@
-import { Application, Container, Graphics, Text } from "pixi.js";
-import gsap from "gsap";
+import { Container, Graphics, Text } from "pixi.js";
 import { Gameboard } from "./Gameboard";
 import { Game } from "./Game";
+import gsap from "gsap";
 
 export class WinScreen {
     game: Game
+    gameboard: Gameboard
     winScreen: Container
     winBackground: Graphics
     winText: Text
@@ -12,6 +13,7 @@ export class WinScreen {
 
     constructor(game: Game) {
         this.game = game
+        this.gameboard = game.gameboard
         this.winScreen = new Container()
         this.winBackground = new Graphics()
         this.winText = new Text({text: 'You Lose!', style: {fontSize: 64, fill: 0xffffff, fontWeight: 'bold'}})
@@ -49,6 +51,25 @@ export class WinScreen {
     }
 
     triggerWinScreen() {
+        const counts = this.gameboard.tiles.reduce((acc: Record<string, number>, tile) => {
+                acc[tile.symbol.name] = (acc[tile.symbol.name] || 0) + 1
+                return acc
+            }, {})
 
+        this.winScreen.alpha = 0
+        this.winScreen.visible = true
+        gsap.to(this.winScreen, {alpha: 1, duration: 2, onComplete: () => {
+            gsap.to(this.winText.scale, { x: 1.2, y: 1.2, duration: 0.5, yoyo: true, repeat: -1})
+            gsap.to(this.winText, { y: -30, duration: 0.5, ease: "power2.out", yoyo: true, repeat: -1 })
+            for (const tile of this.gameboard.tiles) if (counts[tile.symbol.name] >= 3) {
+                gsap.to(tile.symbolGraphic.scale, { x: 1.3, y: 1.3, duration: 0.5, yoyo: true, repeat: -1})
+                gsap.to(tile.symbolGraphic, { y: tile.symbolGraphic.y -5, duration: 0.5, ease: "power2.out", yoyo: true, repeat: -1 })
+            }
+        }})
+
+        for (const count in counts) if (counts[count] >= 3) {
+            this.winText.text = 'You Win!'
+            break
+        }
     }
 }
