@@ -49,6 +49,11 @@ export class Tile {
             }
         })
 
+        gsap.to(this.symbolGraphic.scale, {x:0, duration: 0.15, onComplete: () => {
+            gsap.to(this.symbolGraphic.scale, {x:1, duration: 0.15, onComplete: () => {} })
+            }
+        })
+
         this.symbolGraphic.visible = true
         this.symbolRevealed = true
 

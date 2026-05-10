@@ -8,7 +8,7 @@ export class Button {
     buttonText: Text
 
 
-    constructor(game: Game, width: number, height: number, offsetY: number, text: string,  colour: number, onClick: () => void) {
+    constructor(game: Game, draw: () => Graphics, offsetY: number, text: string, onClick: () => void) {
         this.game = game
 
         this.buttonContainer = new Container()
@@ -16,12 +16,10 @@ export class Button {
         this.buttonContainer.eventMode = "static"
         this.buttonContainer.cursor = 'pointer'
 
-        this.buttonBackground = new Graphics()
-        this.buttonBackground.rect(-width/2, -height/2, width, height)
-        this.buttonBackground.fill({ color: colour })
+        this.buttonBackground = draw()
         this.buttonContainer.addChild(this.buttonBackground)
 
-        this.buttonText = new Text({text: text, style: {fontSize: 32, fill: 0xffffff}})
+        this.buttonText = new Text({text: text, style: {fontSize: this.game.app.screen.height / 25, fill: 0xffffff}})
         this.buttonText.anchor.set(0.5)
         this.buttonContainer.addChild(this.buttonText)
 

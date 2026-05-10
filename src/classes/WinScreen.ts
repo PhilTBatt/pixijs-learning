@@ -17,12 +17,11 @@ export class WinScreen {
         this.gameboard = game.gameboard
         this.winScreen = new Container()
         this.winBackground = new Graphics()
-        this.winText = new Text({text: 'You Lose!', style: {fontSize: 64, fill: 0xffffff, fontWeight: 'bold'}})
+        this.winText = new Text({text: 'You Lose!', style: {fontSize: this.game.app.screen.height / 12, fill: 0xffffff, fontWeight: 'bold'}})
 
-        const resetButtonWidth = this.game.app.screen.width / 10
-        const resetButtonHeight = this.game.app.screen.height / 12
         const resetButtonOffsetY = this.game.app.screen.height / 6
-        this.resetButton = new Button(this.game, resetButtonWidth, resetButtonHeight, resetButtonOffsetY, 'Reset', 0x909090, () => this.gameboard.resetGameBoard())
+        const buttonShape = new Graphics().circle(0, 0, this.gameboard.gameboardHeight/9).fill({ color: 0xd1001f })
+        this.resetButton = new Button(this.game, () => buttonShape, resetButtonOffsetY, 'Reset', () => this.gameboard.resetGameBoard())
     }
 
     initialiseWinScreen(gameboard: Gameboard) {

@@ -3,6 +3,7 @@ import { Game } from "./Game";
 import { Symbol, symbols } from "../types/Symbol";
 import { Tile } from "./Tile";
 import gsap from "gsap";
+import { Button } from "./Button";
 
 export class Gameboard {
     game: Game
@@ -11,6 +12,7 @@ export class Gameboard {
     gameboardWidth: number
     tiles: Tile[]
     symbols: Symbol[]
+    revealAllButton: Button
 
     constructor(game: Game, gameboardWidth: number, gameboardHeight: number) {
         this.game = game
@@ -19,6 +21,13 @@ export class Gameboard {
         this.gameboardHeight = gameboardHeight
         this.tiles = []
         this.symbols = symbols
+
+        const buttonShape = new Graphics().circle(0, 0, this.gameboardHeight/9).fill({ color: 0xd1001f })
+        this.revealAllButton = new Button(this.game, () => buttonShape, 0, 'Reveal', () => this.revealAllSymbols() )
+        this.revealAllButton.buttonContainer.x = this.game.app.screen.width/2 + this.gameboardWidth * 0.75
+        this.revealAllButton.buttonContainer.y = this.game.app.screen.height / 2 + this.gameboardHeight * 0.2
+
+        this.game.app.stage.addChild(this.revealAllButton.buttonContainer)
     }
 
     initialiseGameBoard() {
@@ -45,7 +54,6 @@ export class Gameboard {
     checkWin() {
         const allRevealed = this.tiles.every(tile => tile.symbolRevealed)
         if (allRevealed) this.game.winScreen.triggerWinScreen()
-
     }
 
     resetGameBoard() {
@@ -58,5 +66,9 @@ export class Gameboard {
         this.game.winScreen.winText.y = 0
         this.game.winScreen.winText.text = 'You Lose!'
         this.game.app.stage.addChild(this.game.winScreen.winScreen)
+    }
+
+    revealAllSymbols() {
+        this.tiles.filter(tile => !tile.symbolRevealed).forEach((tile, index) => setTimeout(() => tile.revealSymbol(), index * 300))
     }
 }
